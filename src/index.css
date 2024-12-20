@@ -1,0 +1,137 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #262626;
+  color: #d9d9d9;
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.game-container {
+  border: solid 1px #d9d9d9;
+  width: 500px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.game-header {
+  text-align: center;
+}
+
+.game-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #f9f4da;
+}
+
+.game-header-description {
+  font-size: 0.875rem;
+  max-width: 350px;
+  color: #8e8e8e;
+}
+
+.game-status {
+  text-align: center;
+  background-color: #10a958;
+  width: 350px;
+  padding: 4px 0;
+  border-radius: 5px;
+  color: #f9f4da;
+  margin-block: 30px;
+  ;
+}
+
+.game-status>h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 5px;
+}
+
+.game-status>p {
+  margin: 5px;
+}
+
+.languages-chips {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 350px;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 30px;
+}
+
+.languages-chips>div {
+  padding: 4.5px;
+  font-size: 0.875rem;
+  border-radius: 3px;
+}
+
+section.current-word {
+
+  display: flex;
+  gap: 5px;
+  /* border-bottom: 1px solid #d9d9d9; */
+  margin-bottom: 10px;
+}
+
+section.current-word>span {
+  font-size: 1.25rem;
+  padding: 5px;
+  background-color: #323232;
+  height: 35px;
+  width: 35px;
+  border-bottom: 1px solid #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 350px;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.keyboard>button {
+  font-size: 1.10rem;
+  padding: 5px;
+  background-color: #FCBA29;
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+}
+
+.keyboard>button.clickedCorrect {
+  background-color: rgb(53, 221, 53);
+  color: white;
+}
+
+.keyboard>button.clickedWrong {
+  background-color: rgb(226, 30, 30);
+  color: rgb(245, 243, 243);
+}
+
+.new-game {
+  height: 35px;
+  width: 250px;
+  cursor: pointer;
+  background-color: #328AF1;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.25rem;
+  color: #d7d7d7;
+}
