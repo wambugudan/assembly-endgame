@@ -40,6 +40,14 @@ body {
 }
 
 .game-status {
+  height: 60px;
+  width: 350px;
+  padding: 4px 0;
+  margin-block: 30px;
+  ;
+}
+
+.game-status-won {
   text-align: center;
   background-color: #10a958;
   width: 350px;
@@ -50,13 +58,34 @@ body {
   ;
 }
 
-.game-status>h2 {
+.game-status-won>h2 {
   font-size: 1.25rem;
   font-weight: 500;
   margin: 5px;
 }
 
-.game-status>p {
+.game-status-won>p {
+  margin: 5px;
+}
+
+.game-status-lost {
+  text-align: center;
+  background-color: #8d3a3a;
+  width: 350px;
+  padding: 4px 0;
+  border-radius: 5px;
+  color: #f9f4da;
+  margin-block: 30px;
+  ;
+}
+
+.game-status-lost>h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 5px;
+}
+
+.game-status-lost>p {
   margin: 5px;
 }
 
@@ -69,11 +98,34 @@ body {
   margin-bottom: 30px;
 }
 
-.languages-chips>div {
+.chip {
   padding: 4.5px;
   font-size: 0.875rem;
   border-radius: 3px;
+  position: relative;
 }
+
+.chip.lost {
+  padding: 4.5px;
+  font-size: 0.875rem;
+  border-radius: 5px;
+  position: relative;
+}
+
+.chip.lost::after {
+  content: "\2620";
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 0.85rem;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.945);
+}
+
 
 section.current-word {
 
@@ -134,4 +186,5 @@ section.current-word>span {
   border-radius: 5px;
   font-size: 1.25rem;
   color: #d7d7d7;
+  margin-bottom: 10px;
 }

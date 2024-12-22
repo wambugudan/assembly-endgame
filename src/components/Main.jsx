@@ -11,25 +11,55 @@ export default function Hangman() {
     const [guessedLetters, setGuessedLetters] = useState([])
 
 
-    // Coverting the currentWord string to an array of upper case letters
+    // Derrived values
+
+    let wrongGuessCount = guessedLetters.filter(letter => (
+        !currentWord.includes(letter)
+    )).length
+
+    // Checking if game is won
+    const isGameWon =
+        currentWord.split("").every(letter =>
+            guessedLetters.includes(letter))
+
+
+    // Checking if game is lost
+    const isGameLost = wrongGuessCount >= Object.keys(languages).length - 1
+
+
+    // Derriving if game is over
+    const isGameOver = isGameWon || isGameLost
+
+
+    // Spliting the current word to an array to displa
     const currentWordLetters = currentWord.split("")
         .map((letter, index) => (
             guessedLetters.includes(letter) ?
-                <span key={index}>{letter.toUpperCase()}</span> :
-                " "
+                <span key={index} className="word">{letter.toUpperCase()}</span> :
+                <span key={index} ></span>
         ))
 
 
     // iterating on the languages chips to display them
     const languageChips = languages.map((language, index) => {
+        // Variable to check if language is lost
+        const languageIsLost = index < wrongGuessCount
+
         const styles = {
             backgroundColor: language.backgroundColor,
             color: language.color
         }
 
+        // Assigning a dynamic class using the clsx method
+        const className = clsx("chip", languageIsLost && "lost")
+
         return (
-            <div key={index} style={styles}>{
-                language.name}
+            <div
+                key={index}
+                style={styles}
+                className={className}
+            >
+                {language.name}
             </div>
         )
 
@@ -54,8 +84,6 @@ export default function Hangman() {
                 }
             )
 
-            console.log(className)
-
             return (
                 <button
                     key={alphabetLetter}
@@ -79,8 +107,6 @@ export default function Hangman() {
         )
     }
 
-    console.log(guessedLetters)
-
 
 
     return (
@@ -94,11 +120,22 @@ export default function Hangman() {
                 </p>
             </header>
 
-            {/* Status section */}
+            {/* Status section You Won Message*/}
             <section className="game-status">
+
+            </section>
+
+            {/* Status section You Won Message*/}
+            {isGameWon && <section className="game-status-won">
                 <h2> You won!!</h2>
                 <p> Well done &#128513;</p>
-            </section>
+            </section>}
+
+            {/* Status section You lost Message*/}
+            {isGameLost && <section className="game-status-lost">
+                <h2> You lost!!</h2>
+                <p> Better start learning some assembly code &#128513;</p>
+            </section>}
 
             {/* Languages chips section */}
             <section className="languages-chips">
@@ -115,10 +152,9 @@ export default function Hangman() {
                 {keyboardLetters}
             </section>
 
-            {/* New game button */}
-            <button className="new-game">
-                New Game
-            </button>
+            {/* New game button */}{
+            /* Conditional render if game is won */}
+            {isGameOver && <button className="new-game">New Game</button>}
         </div>
     )
 }
