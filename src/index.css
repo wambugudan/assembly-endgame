@@ -136,8 +136,8 @@ section.current-word>span.word {
   align-items: center;
 }
 
-.section.current-word>span.word.missed {
-  background-color: #8d3a3a;
+section.current-word>span.word.missed {
+  color: #8d3a3a !important;
 }
 
 .keyboard {

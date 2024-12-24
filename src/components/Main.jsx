@@ -3,6 +3,7 @@ import { languages } from "./Languages"
 import clsx from "clsx"
 import { getFarewellText, getRandomCurrentWord } from "./utils"
 import { words } from "./words"
+import Confetti from "react-confetti"
 
 export default function Hangman() {
 
@@ -12,6 +13,8 @@ export default function Hangman() {
 
     // Initializing the current word variable in state
     const [currentWord, setCurrentWord] = useState(randomWord)
+
+    console.log(currentWord)
 
     // state variable to hold the guessed letter
     const [guessedLetters, setGuessedLetters] = useState([])
@@ -50,7 +53,10 @@ export default function Hangman() {
     const currentWordLetters = currentWord.split("")
         .map((letter, index) => {
             const shouldRevealLetter = isGameLost || guessedLetters.includes(letter)
-            const missedLetters = clsx("word", { missed: isGameLost && !guessedLetters.includes(letter) && !shouldRevealLetter })
+            const missedLetters = clsx("word",
+                isGameLost && !guessedLetters.includes(letter) && "missed"
+            )
+
             return (
                 shouldRevealLetter ?
                     <span key={index} className={missedLetters}>{letter.toUpperCase()}</span> :
@@ -171,6 +177,16 @@ export default function Hangman() {
 
     return (
         <div className="game-container">
+
+            {/* Displaying confetti when game is won */}
+            {
+                isGameWon &&
+                <Confetti
+                    recycle={false}
+                    numberOfPieces={1000}
+                />
+            }
+
             {/* Header section of the game */}
             <header className="game-header">
                 <h2 className="game-title">Assembly Endgame</h2>
