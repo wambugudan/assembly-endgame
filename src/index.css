@@ -40,14 +40,19 @@ body {
 }
 
 .game-status {
-  text-align: center;
-  background-color: #10a958;
   width: 350px;
+  height: 62px;
   padding: 4px 0;
   border-radius: 5px;
   color: #f9f4da;
+  margin-block: 0px;
+  padding: 4px 0;
   margin-block: 30px;
-  ;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .game-status>h2 {
@@ -60,6 +65,19 @@ body {
   margin: 5px;
 }
 
+.game-status.won {
+  background-color: #10a958;
+}
+
+.game-status.lost {
+  background-color: #8d3a3a;
+}
+
+.game-status.farewell {
+  background-color: #7a5ea7;
+  border: 1px dashed #323232;
+}
+
 .languages-chips {
   display: flex;
   flex-wrap: wrap;
@@ -69,11 +87,34 @@ body {
   margin-bottom: 30px;
 }
 
-.languages-chips>div {
+.chip {
   padding: 4.5px;
   font-size: 0.875rem;
   border-radius: 3px;
+  position: relative;
 }
+
+.chip.lost {
+  padding: 4.5px;
+  font-size: 0.875rem;
+  border-radius: 5px;
+  position: relative;
+}
+
+.chip.lost::after {
+  content: "\2620";
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 0.85rem;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.945);
+}
+
 
 section.current-word {
 
@@ -83,7 +124,7 @@ section.current-word {
   margin-bottom: 10px;
 }
 
-section.current-word>span {
+section.current-word>span.word {
   font-size: 1.25rem;
   padding: 5px;
   background-color: #323232;
@@ -93,6 +134,10 @@ section.current-word>span {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+section.current-word>span.word.missed {
+  color: #8d3a3a !important;
 }
 
 .keyboard {
@@ -115,6 +160,11 @@ section.current-word>span {
   border-radius: 3px;
 }
 
+.keyboard>button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .keyboard>button.clickedCorrect {
   background-color: rgb(53, 221, 53);
   color: white;
@@ -134,4 +184,17 @@ section.current-word>span {
   border-radius: 5px;
   font-size: 1.25rem;
   color: #d7d7d7;
+  margin-bottom: 10px;
+}
+
+.sr-only {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  margin: 0;
+  padding: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: no-wrap;
+  border: 0;
 }
