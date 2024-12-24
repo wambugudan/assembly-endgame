@@ -1,14 +1,21 @@
 import { useState } from "react"
 import { languages } from "./Languages"
 import clsx from "clsx"
+import { getFarewellText, getRandomCurrentWord } from "./utils"
+import { words } from "./words"
 
 export default function Hangman() {
 
+    // Get Random Word for the game
+    const randomWord = () => getRandomCurrentWord()
+
+
     // Initializing the current word variable in state
-    const [currentWord, setCurrentWord] = useState("react")
+    const [currentWord, setCurrentWord] = useState(randomWord)
 
     // state variable to hold the guessed letter
     const [guessedLetters, setGuessedLetters] = useState([])
+
 
 
     // Derrived values
@@ -17,6 +24,9 @@ export default function Hangman() {
         !currentWord.includes(letter)
     )).length
 
+    // Variable to track num of guessed left
+    const numOFGuessesLeft = languages.length - 1
+
     // Checking if game is won
     const isGameWon =
         currentWord.split("").every(letter =>
@@ -24,20 +34,30 @@ export default function Hangman() {
 
 
     // Checking if game is lost
-    const isGameLost = wrongGuessCount >= Object.keys(languages).length - 1
+    const isGameLost = wrongGuessCount >= numOFGuessesLeft
 
 
     // Derriving if game is over
     const isGameOver = isGameWon || isGameLost
 
+    // Derived vars for farewell message
+    const lastGuessedLetter = guessedLetters[guessedLetters.length - 1]
 
-    // Spliting the current word to an array to displa
+    const isLastGuessIncorrect = lastGuessedLetter && !currentWord.includes(lastGuessedLetter)
+
+
+    // Spliting the current word to an array to display
     const currentWordLetters = currentWord.split("")
-        .map((letter, index) => (
-            guessedLetters.includes(letter) ?
-                <span key={index} className="word">{letter.toUpperCase()}</span> :
-                <span key={index} ></span>
-        ))
+        .map((letter, index) => {
+            const shouldRevealLetter = isGameLost || guessedLetters.includes(letter)
+            const missedLetters = clsx("word", { missed: isGameLost && !guessedLetters.includes(letter) && !shouldRevealLetter })
+            return (
+                shouldRevealLetter ?
+                    <span key={index} className={missedLetters}>{letter.toUpperCase()}</span> :
+                    <span key={index} className={missedLetters} ></span>
+            )
+        }
+        )
 
 
     // iterating on the languages chips to display them
@@ -86,6 +106,9 @@ export default function Hangman() {
 
             return (
                 <button
+                    disabled={isGameOver}
+                    aria-disabled={guessedLetters.includes(alphabetLetter)}
+                    aria-label={`Letter ${alphabetLetter}`}
                     key={alphabetLetter}
                     className={className}
                     onClick={() => handleButtonClicked(alphabetLetter)}
@@ -107,6 +130,43 @@ export default function Hangman() {
         )
     }
 
+    // Dynamic class assignment for game status
+    const gameStatusStyles = clsx("game-status", {
+        won: isGameWon,
+        lost: isGameLost,
+        farewell: !isGameOver && isLastGuessIncorrect
+    })
+
+    // Function to check the game status
+    const renderGameStatus = function () {
+        if (!isGameOver && isLastGuessIncorrect) {
+            return getFarewellText(languages[wrongGuessCount - 1].name)
+        }
+
+        if (isGameWon) {
+            return (
+                <>
+                    <h2> You won!!</h2>
+                    <p> Well done &#128513;</p>
+                </>
+            )
+        } else if (isGameLost) {
+            return (
+                <>
+                    <h2> You lost!!</h2>
+                    <p> Better start learning some assembly code &#128513;</p>
+                </>
+            )
+        } else {
+            return null
+        }
+    }
+
+    // start new game function
+    function startNewGame() {
+        setCurrentWord(getRandomCurrentWord)
+        setGuessedLetters([])
+    }
 
 
     return (
@@ -120,22 +180,10 @@ export default function Hangman() {
                 </p>
             </header>
 
-            {/* Status section You Won Message*/}
-            <section className="game-status">
-
+            {/* Game Status Message*/}
+            <section aria-live="polite" role="status" className={gameStatusStyles}>
+                {renderGameStatus()}
             </section>
-
-            {/* Status section You Won Message*/}
-            {isGameWon && <section className="game-status-won">
-                <h2> You won!!</h2>
-                <p> Well done &#128513;</p>
-            </section>}
-
-            {/* Status section You lost Message*/}
-            {isGameLost && <section className="game-status-lost">
-                <h2> You lost!!</h2>
-                <p> Better start learning some assembly code &#128513;</p>
-            </section>}
 
             {/* Languages chips section */}
             <section className="languages-chips">
@@ -147,6 +195,23 @@ export default function Hangman() {
                 {currentWordLetters}
             </section>
 
+            {/* Screen reader section for reading out the current word */}
+            <section className="sr-only" aria-live="polite" role="status">
+                <p>
+                    {currentWord.includes(lastGuessedLetter) ?
+                        `Correct! The letter ${lastGuessedLetter} is in the word` :
+                        `Wrong! The letter ${lastGuessedLetter} is not in the word`
+                    }
+
+                    You have {numOFGuessesLeft} guesses left
+                </p>
+
+                <p>current word: {currentWord.split("").map(letter =>
+                    guessedLetters.includes(letter) ? letter + "." : "blank.")
+                    .join(" ")}
+                </p>
+            </section>
+
             {/* Display Alphabet Keyboard */}
             <section className="keyboard">
                 {keyboardLetters}
@@ -154,7 +219,8 @@ export default function Hangman() {
 
             {/* New game button */}{
             /* Conditional render if game is won */}
-            {isGameOver && <button className="new-game">New Game</button>}
+            {isGameOver &&
+                <button className="new-game" onClick={startNewGame}>New Game</button>}
         </div>
     )
 }
